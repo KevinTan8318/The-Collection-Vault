@@ -54,13 +54,33 @@ const vault = [
   },
 ];
 
-const rarity = {
-  Common: "rgb(51, 143, 51)",
-  Uncommon: "rgb(41, 92, 133)",
-  Rare: "rgb(214, 109, 60)",
-  Epic: "rgb(129, 57, 196)",
-  Legendary: "rgb(238, 172, 29)",
-};
+const rarityColors = [
+  {
+    rarityName: "Common",
+    rarityColor: "rgb(51, 143, 51)",
+    rarityChance: .9
+  },
+  {
+    rarityName: "Uncommon",
+    rarityColor: "rgb(41, 92, 133)",
+    rarityChance: .75
+  },
+  {
+    rarityName: "Rare",
+    rarityColor: "rgb(214, 109, 60)",
+    rarityChance: .6
+  },
+  {
+    rarityName: "Epic",
+    rarityColor: "rgb(129, 57, 196)",
+    rarityChance: .4
+  },
+  {
+    rarityName: "Legendary",
+    rarityColor: "rgb(238, 172, 29)",
+    rarityChance: .02
+  },
+];
 
 addButton.addEventListener("click", getSong);
 removeButton.addEventListener("click", removeItem);
@@ -72,14 +92,15 @@ function addItem(chosenSong) {
 
   console.log(ulElement);
   newItem.textContent = `${chosenSong.name}, ${chosenSong.category}, ${chosenSong.rarity}`;
+  newItem.style.backgroundColor = rarityColors[chosenSong.rarity]
   chosenItems.push(newItem);
 }
 
 function removeItem() {
-  if (chosenItems.length > 0) {
-    chosenItems.pop();
+  if (chosenItems.length > 0) { // check if there are items in the chosenItems array
+    chosenItems.pop(); // removes item from array
     let element = document.getElementById(chosenItems.length);
-    element.remove();
+    element.remove(); // removes li element
   }
 }
 
