@@ -55,30 +55,25 @@ const vault = [
 ];
 
 const rarityColors = [
-  {
-    rarityName: "Common",
+  Common = {
     rarityColor: "rgb(51, 143, 51)",
     rarityChance: .9
   },
-  {
-    rarityName: "Uncommon",
+  Uncommon = {
     rarityColor: "rgb(41, 92, 133)",
     rarityChance: .75
   },
-  {
-    rarityName: "Rare",
+  Rare = {
     rarityColor: "rgb(214, 109, 60)",
     rarityChance: .6
   },
-  {
-    rarityName: "Epic",
+  Epic = {
     rarityColor: "rgb(129, 57, 196)",
     rarityChance: .4
   },
-  {
-    rarityName: "Legendary",
+  Legendary = {
     rarityColor: "rgb(238, 172, 29)",
-    rarityChance: .02
+    rarityChance: .2
   },
 ];
 
@@ -92,7 +87,8 @@ function addItem(chosenSong) {
 
   console.log(ulElement);
   newItem.textContent = `${chosenSong.name}, ${chosenSong.category}, ${chosenSong.rarity}`;
-  newItem.style.backgroundColor = rarityColors[chosenSong.rarity]
+  console.log(rarityColors[chosenSong.rarity])
+  newItem.style.backgroundColor = rarityColors[chosenSong.rarity] // change color
   chosenItems.push(newItem);
 }
 
