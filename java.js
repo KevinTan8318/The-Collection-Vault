@@ -1,6 +1,8 @@
 const ulElement = document.getElementById("vaultList");
 const addButton = document.getElementById("addBtn");
 const removeButton = document.getElementById("removeBtn");
+const totalItemsText = document.getElementById("totalItems")
+const avgRatingText = document.getElementById("avgRating")
 const chosenItems = [];
 
 const vault = [
@@ -80,6 +82,10 @@ const rarityColors = {
 addButton.addEventListener("click", getSong);
 removeButton.addEventListener("click", removeItem);
 
+function updateVisuals() {
+   totalItemsText.textContent = `TOTAL ITEMS: ${chosenItems.length}`
+}
+
 function addItem(chosenSong) {
   const newItem = document.createElement("li"); // create a new li
   ulElement.appendChild(newItem); // place it into ulElement
@@ -87,9 +93,11 @@ function addItem(chosenSong) {
 
   console.log(ulElement);
   newItem.textContent = `${chosenSong.name}, ${chosenSong.category}, ${chosenSong.rarity}`;
-
   newItem.style.backgroundColor = rarityColors[chosenSong.rarity].rarityColor;
+
   chosenItems.push(newItem);
+
+  updateVisuals()
 }
 
 function removeItem() {
@@ -98,6 +106,8 @@ function removeItem() {
     chosenItems.pop(); // removes item from array
     let element = document.getElementById(chosenItems.length);
     element.remove(); // removes li element
+
+    updateVisuals()
   }
 }
 
@@ -107,10 +117,10 @@ function getSong() {
 
   let chance = rarityColors[chosenSong.rarity].rarityChance;
   let randomNum = Math.round(Math.random() * 100)
-  console.log(randomNum)
+
   if (randomNum < chance) {
     addItem(chosenSong);
   } else {
-
+    getSong()
   }
 }
