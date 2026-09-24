@@ -1,22 +1,24 @@
 const ulElement = document.getElementById("vaultList");
 const addButton = document.getElementById("addBtn");
 const removeButton = document.getElementById("removeBtn");
-const totalItemsText = document.getElementById("totalItems")
-const avgRatingText = document.getElementById("avgRating")
+const totalItemsText = document.getElementById("totalItems");
+const avgRatingText = document.getElementById("avgRating");
 const chosenItems = [];
+
+let total = 0;
 
 const vault = [
   {
     name: "Song1",
     category: "Pop",
     rarity: "Common",
-    rating: 50,
+    rating: 90,
   },
   {
     name: "Song2",
     category: "Pop",
     rarity: "Common",
-    rating: 31,
+    rating: 90,
   },
   {
     name: "Song3",
@@ -82,8 +84,13 @@ const rarityColors = {
 addButton.addEventListener("click", getSong);
 removeButton.addEventListener("click", removeItem);
 
+function getRating(rating) {
+  total += rating;
+  avgRatingText.textContent = `AVERAGE RATING: ${Math.round(total / chosenItems.length)}`;
+}
+
 function updateVisuals() {
-   totalItemsText.textContent = `TOTAL ITEMS: ${chosenItems.length}`
+  totalItemsText.textContent = `TOTAL ITEMS: ${chosenItems.length}`;
 }
 
 function addItem(chosenSong) {
@@ -97,7 +104,8 @@ function addItem(chosenSong) {
 
   chosenItems.push(newItem);
 
-  updateVisuals()
+  getRating(chosenSong.rating);
+  updateVisuals();
 }
 
 function removeItem() {
@@ -105,9 +113,9 @@ function removeItem() {
     // check if there are items in the chosenItems array
     chosenItems.pop(); // removes item from array
     let element = document.getElementById(chosenItems.length);
-    element.remove(); // removes li element
 
-    updateVisuals()
+    element.remove(); // removes li element
+    updateVisuals();
   }
 }
 
@@ -116,11 +124,11 @@ function getSong() {
   chosenSong = vault[chosenSong];
 
   let chance = rarityColors[chosenSong.rarity].rarityChance;
-  let randomNum = Math.round(Math.random() * 100)
+  let randomNum = Math.round(Math.random() * 100);
 
   if (randomNum < chance) {
     addItem(chosenSong);
   } else {
-    getSong()
+    getSong();
   }
 }
