@@ -57,23 +57,23 @@ const vault = [
 const rarityColors = {
   Common: {
     rarityColor: "rgb(51, 143, 51)",
-    rarityChance: 0.9,
+    rarityChance: 90,
   },
   Uncommon: {
     rarityColor: "rgb(41, 92, 133)",
-    rarityChance: 0.75,
+    rarityChance: 75,
   },
   Rare: {
     rarityColor: "rgb(214, 109, 60)",
-    rarityChance: 0.6,
+    rarityChance: 50,
   },
   Epic: {
     rarityColor: "rgb(129, 57, 196)",
-    rarityChance: 0.4,
+    rarityChance: 25,
   },
   Legendary: {
     rarityColor: "rgb(238, 172, 29)",
-    rarityChance: 0.02,
+    rarityChance: 2,
   },
 };
 
@@ -106,6 +106,11 @@ function getSong() {
   chosenSong = vault[chosenSong];
 
   let chance = rarityColors[chosenSong.rarity].rarityChance;
+  let randomNum = Math.round(Math.random() * 100)
+  console.log(randomNum)
+  if (randomNum < chance) {
+    addItem(chosenSong);
+  } else {
 
-  addItem(chosenSong);
+  }
 }
