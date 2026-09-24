@@ -1,4 +1,7 @@
-const liElements = document.getElementsByTagName("li");
+const ulElement = document.getElementById("vaultList");
+const addButton = document.getElementById("addBtn");
+const removeButton = document.getElementById("removeBtn");
+const chosenItems = [];
 
 const vault = [
   {
@@ -51,72 +54,38 @@ const vault = [
   },
 ];
 
-const bonusItems = [
-  {
-    name: "BonusSong1",
-    category: "Pop",
-    rarity: "Common",
-    rating: 50,
-  },
-  {
-    name: "BonusSong2",
-    category: "Pop",
-    rarity: "Common",
-    rating: 50,
-  },
-  {
-    name: "BonusSong3",
-    category: "Pop",
-    rarity: "Common",
-    rating: 50,
-  },
-];
-
-const chosenItems = []
 const rarity = {
   Common: "rgb(51, 143, 51)",
   Uncommon: "rgb(41, 92, 133)",
   Rare: "rgb(214, 109, 60)",
   Epic: "rgb(129, 57, 196)",
   Legendary: "rgb(238, 172, 29)",
+};
+
+addButton.addEventListener("click", getSong);
+removeButton.addEventListener("click", removeItem);
+
+function addItem(chosenSong) {
+  const newItem = document.createElement("li"); // create a new li
+  ulElement.appendChild(newItem); // place it into ulElement
+  newItem.id = chosenItems.length;
+
+  console.log(ulElement);
+  newItem.textContent = `${chosenSong.name}, ${chosenSong.category}, ${chosenSong.rarity}`;
+  chosenItems.push(newItem);
 }
 
-function refresh(array) {
-  // clear all the text
-  for (let i = 0; i < 8; i++) {
-    liElements[i].textContent = ""
+function removeItem() {
+  if (chosenItems.length > 0) {
+    chosenItems.pop();
+    let element = document.getElementById(chosenItems.length);
+    element.remove();
   }
-  // redraw the text with updated content
-  for (let i = 0; i < array.length; i++) {
-      let msg = `${array[i].name}, ${array[i].category}, ${array[i].rarity}`
-      liElements[i].textContent = msg
-      liElements[i].style.backgroundColor = rarity[array[i].rarity]
-  }
-  document.getElementById("totalItems").textContent = `TOTAL ITEMS: ${chosenItems.length}`
 }
 
-document.getElementById("addBtn").addEventListener('click', () => {
-    let chosenIndex = Math.floor(Math.random() * vault.length)
-    let item = vault[chosenIndex]
-    if (chosenItems.length < vault.length) {
-      chosenItems.push(item)
-      refresh(chosenItems)
-      console.log(chosenItems)
-    }
-});
+function getSong() {
+  let chosenSong = Math.floor(Math.random() * vault.length);
+  chosenSong = vault[chosenSong];
 
-document.getElementById("removeBtn").addEventListener('click', () => {
-  chosenItems.pop()
-  refresh(chosenItems)
-  console.log(chosenItems)
-});
-
-document.getElementById("mergeBtn").addEventListener('click', () => {
-  for (let i = 0; i < 3; i++) {
-    let chosenIndex = Math.floor(Math.random() * bonusItems.length)
-    let item = bonusItems[chosenIndex]
-    chosenItems.push(item)
-    refresh(chosenItems)
-    console.log(chosenItems)
-  }
-});
+  addItem(chosenSong);
+}
