@@ -54,16 +54,31 @@ const vault = [
 const chosenItems = []
 
 function refresh(array) {
-    for (let i = 0; i < array.length; i++) {
-        let msg = `${array[i].name}, ${array[i].category}, ${array[i].rarity}`
-        liElements[i].textContent = msg
-    }
+  let i = 0
+
+  for (let i = 0; i < 8; i++) {
+    liElements[i].textContent = ""
+  }
+
+  for (let i = 0; i < array.length; i++) {
+      let msg = `${array[i].name}, ${array[i].category}, ${array[i].rarity}`
+      liElements[i].textContent = msg
+  }
 }
 
 document.getElementById("addBtn").addEventListener('click', () => {
     let chosenIndex = Math.floor(Math.random() * vault.length)
     let item = vault[chosenIndex]
-    chosenItems.push(item)
-    refresh(chosenItems)
-    console.log(chosenItems)
+    if (chosenItems.length < vault.length) {
+      chosenItems.push(item)
+      refresh(chosenItems)
+      console.log(chosenItems)
+    }
 });
+
+document.getElementById("removeBtn").addEventListener('click', () => {
+  chosenItems.pop()
+  refresh(chosenItems)
+  console.log(chosenItems)
+});
+
