@@ -51,19 +51,48 @@ const vault = [
   },
 ];
 
+const bonusItems = [
+  {
+    name: "BonusSong1",
+    category: "Pop",
+    rarity: "Common",
+    rating: 50,
+  },
+  {
+    name: "BonusSong2",
+    category: "Pop",
+    rarity: "Common",
+    rating: 50,
+  },
+  {
+    name: "BonusSong3",
+    category: "Pop",
+    rarity: "Common",
+    rating: 50,
+  },
+];
+
 const chosenItems = []
+const rarity = {
+  Common: "rgb(51, 143, 51)",
+  Uncommon: "rgb(41, 92, 133)",
+  Rare: "rgb(214, 109, 60)",
+  Epic: "rgb(129, 57, 196)",
+  Legendary: "rgb(238, 172, 29)",
+}
 
 function refresh(array) {
-  let i = 0
-
+  // clear all the text
   for (let i = 0; i < 8; i++) {
     liElements[i].textContent = ""
   }
-
+  // redraw the text with updated content
   for (let i = 0; i < array.length; i++) {
       let msg = `${array[i].name}, ${array[i].category}, ${array[i].rarity}`
       liElements[i].textContent = msg
+      liElements[i].style.backgroundColor = rarity[array[i].rarity]
   }
+  document.getElementById("totalItems").textContent = `TOTAL ITEMS: ${chosenItems.length}`
 }
 
 document.getElementById("addBtn").addEventListener('click', () => {
@@ -82,3 +111,12 @@ document.getElementById("removeBtn").addEventListener('click', () => {
   console.log(chosenItems)
 });
 
+document.getElementById("mergeBtn").addEventListener('click', () => {
+  for (let i = 0; i < 3; i++) {
+    let chosenIndex = Math.floor(Math.random() * bonusItems.length)
+    let item = bonusItems[chosenIndex]
+    chosenItems.push(item)
+    refresh(chosenItems)
+    console.log(chosenItems)
+  }
+});
