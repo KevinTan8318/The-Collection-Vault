@@ -12,9 +12,9 @@ const chosenItems = [];
 // the vault pool
 let vault = [
   {name: "Song1", category: "Pop", rarity: "Common", rating: 48},
-  {name: "Song2", category: "Pop", rarity: "Common", rating: 31},
-  {name: "Song3", category: "Pop", rarity: "Common", rating: 35},
-  {name: "Song4", category: "Pop", rarity: "Common", rating: 36},
+  {name: "Song2", category: "Pop", rarity: "Tung", rating: 31},
+  {name: "Song3", category: "Pop", rarity: "Uncommon", rating: 35},
+  {name: "Song4", category: "Pop", rarity: "Mythic", rating: 99},
   {name: "Song5", category: "Pop", rarity: "Legendary", rating: 85},
   {name: "Song6", category: "Pop", rarity: "Uncommon", rating: 35},
   {name: "Song7", category: "Pop", rarity: "Rare", rating: 65},
@@ -23,20 +23,22 @@ let vault = [
 
 let bonusVault = [
   {name: "BonusSong1", category: "Pop", rarity: "Epic", rating: 85},
-  {name: "BonusSong2", category: "Pop", rarity: "Common", rating: 36},
+  {name: "BonusSong2", category: "Pop", rarity: "Mythic", rating: 95},
   {name: "BonusSong3", category: "Pop", rarity: "Rare", rating: 52}
 ];
 
 // list of rarities and their respective properties
 const rarities = {
-  Common: {rarityColor: "rgb(51, 143, 51)", rarityChance: 90},
-  Uncommon: {rarityColor: "rgb(41, 92, 133)", rarityChance: 75},
-  Rare: {rarityColor: "rgb(214, 109, 60)", rarityChance: 50},
+  Common: {rarityColor: "rgb(218, 218, 218)", rarityChance: 99},
+  Uncommon: {rarityColor: "rgb(67, 172, 58)", rarityChance: 75},
+  Rare: {rarityColor: "rgb(60, 129, 185)", rarityChance: 50},
   Epic: {rarityColor: "rgb(129, 57, 196)", rarityChance: 25},
-  Legendary: {rarityColor: "rgb(238, 172, 29)", rarityChance: 1}
+  Legendary: {rarityColor: "rgb(238, 172, 29)", rarityChance: 5},
+  Mythic: {rarityColor: "rgb(255, 33, 26)", rarityChance: 1},
+  Tung: {rarityColor: "rgb(170, 112, 55)", rarityChance: .1},
 };
 
-// // event listeners
+// event listeners
 addButton.addEventListener("click", addItem);
 removeButton.addEventListener("click", removeItem);
 mergeButton.addEventListener("click", merge);
@@ -64,14 +66,14 @@ function removeItem() {
 };
 
 function merge() {
-  vault = [...vault, ...bonusVault]
+  vault = [...vault, ...bonusVault];
   refresh();
 };
 
 
 
 
-// OLD CODE OLD CODE
+
 
 // function getRating() {
 //   let totalRating = 0;
