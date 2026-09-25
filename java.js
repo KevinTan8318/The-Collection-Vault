@@ -1,24 +1,26 @@
+// variables
 const ulElement = document.getElementById("vaultList");
 const addButton = document.getElementById("addBtn");
 const removeButton = document.getElementById("removeBtn");
-const totalItemsText = document.getElementById("totalItems");
-const avgRatingText = document.getElementById("avgRating");
+const totalItemsText = document.getElementById("totalItems")
+const avgRatingText = document.getElementById("avgRating")
+
+// array of chosen items
 const chosenItems = [];
 
-let total = 0;
-
+// the vault pool
 const vault = [
   {
     name: "Song1",
     category: "Pop",
     rarity: "Common",
-    rating: 90,
+    rating: 48,
   },
   {
     name: "Song2",
     category: "Pop",
     rarity: "Common",
-    rating: 90,
+    rating: 31,
   },
   {
     name: "Song3",
@@ -30,13 +32,13 @@ const vault = [
     name: "Song4",
     category: "Pop",
     rarity: "Common",
-    rating: 53,
+    rating: 36,
   },
   {
     name: "Song5",
     category: "Pop",
     rarity: "Legendary",
-    rating: 64,
+    rating: 85,
   },
   {
     name: "Song6",
@@ -48,17 +50,18 @@ const vault = [
     name: "Song7",
     category: "Pop",
     rarity: "Rare",
-    rating: 43,
+    rating: 65,
   },
   {
     name: "Song8",
     category: "Pop",
     rarity: "Epic",
-    rating: 64,
+    rating: 73,
   },
 ];
 
-const rarityColors = {
+// list of rarities and their respective properties
+const rarities = {
   Common: {
     rarityColor: "rgb(51, 143, 51)",
     rarityChance: 90,
@@ -77,58 +80,61 @@ const rarityColors = {
   },
   Legendary: {
     rarityColor: "rgb(238, 172, 29)",
-    rarityChance: 2,
+    rarityChance: 1,
   },
 };
 
+// event listeners
 addButton.addEventListener("click", getSong);
 removeButton.addEventListener("click", removeItem);
 
-function getRating(rating) {
-  total += rating;
-  avgRatingText.textContent = `AVERAGE RATING: ${Math.round(total / chosenItems.length)}`;
+function getRating() {
+  let totalRating = 0
+  for (let i = 0; i < chosenItems.length; i++) {
+    totalRating += chosenItems[i].rating
+  }
+  const avgRating = (totalRating / chosenItems.length)
+  return (chosenItems.length > 0 && avgRating.toFixed(2)) || 0 // return the calculated average rating (we also check if there's things inside chosenItems so it doesnt return NaN)
 }
 
-function updateVisuals() {
-  totalItemsText.textContent = `TOTAL ITEMS: ${chosenItems.length}`;
+function updateVisuals() { // update the site's texts
+  totalItemsText.textContent = `TOTAL ITEMS: ${chosenItems.length}`
+  avgRatingText.textContent = `AVERAGE RATING: ${getRating()}/100`
 }
 
-function addItem(chosenSong) {
+function addItem(chosenSong) { // add the selected random song into the list
   const newItem = document.createElement("li"); // create a new li
-  ulElement.appendChild(newItem); // place it into ulElement
   newItem.id = chosenItems.length;
-
-  console.log(ulElement);
+  newItem.rating = chosenSong.rating // set the item's rating property (for avg rating calculation)
   newItem.textContent = `${chosenSong.name}, ${chosenSong.category}, ${chosenSong.rarity}`;
-  newItem.style.backgroundColor = rarityColors[chosenSong.rarity].rarityColor;
+  newItem.style.backgroundColor = rarities[chosenSong.rarity].rarityColor;
 
+  ulElement.appendChild(newItem); // place it into ulElement
   chosenItems.push(newItem);
+  console.log(newItem)
 
-  getRating(chosenSong.rating);
-  updateVisuals();
+  updateVisuals()
 }
 
-function removeItem() {
-  if (chosenItems.length > 0) {
-    // check if there are items in the chosenItems array
+function removeItem() { // remove the last item in the list
+  if (chosenItems.length > 0) { // check if there are items in the chosenItems array
     chosenItems.pop(); // removes item from array
     let element = document.getElementById(chosenItems.length);
-
     element.remove(); // removes li element
-    updateVisuals();
   }
+  updateVisuals()
 }
 
-function getSong() {
+function getSong() { // get a random song from the vault
   let chosenSong = Math.floor(Math.random() * vault.length);
   chosenSong = vault[chosenSong];
 
-  let chance = rarityColors[chosenSong.rarity].rarityChance;
-  let randomNum = Math.round(Math.random() * 100);
+  let chance = rarities[chosenSong.rarity].rarityChance;
+  let randomNum = Math.round(Math.random() * 100)
 
-  if (randomNum < chance) {
+  if (randomNum < chance) { // if the random num generated is lower than the song's rarity chance then add the song
     addItem(chosenSong);
   } else {
-    getSong();
+    getSong() // otherwise reroll for a new song
   }
 }
