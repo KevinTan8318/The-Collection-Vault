@@ -13,11 +13,11 @@ let vault = [
   { name: "Song1", category: "Pop", rarity: "Common", rating: 48 },
   { name: "Song2", category: "Pop", rarity: "Common", rating: 31 },
   { name: "Song3", category: "Pop", rarity: "Uncommon", rating: 35 },
-  { name: "Song4", category: "Pop", rarity: "Uncommon", rating: 99 },
-  { name: "Song5", category: "Pop", rarity: "Legendary", rating: 85 },
   { name: "Song6", category: "Pop", rarity: "Uncommon", rating: 35 },
   { name: "Song7", category: "Pop", rarity: "Rare", rating: 65 },
   { name: "Song8", category: "Pop", rarity: "Epic", rating: 73 },
+  { name: "Song4", category: "Pop", rarity: "Legendary", rating: 99 },
+  { name: "Song5", category: "Pop", rarity: "Legendary", rating: 85 },
 ];
 
 let bonusVault = [
@@ -41,7 +41,6 @@ removeButton.addEventListener("click", removeItem);
 mergeButton.addEventListener("click", merge);
 mysteryBtn.addEventListener("click", roll);
 
-// in class example
 // STEP 1: building the list and displaying it on the page
 function refresh() {
   let ulHTML = "<ul>";
@@ -91,12 +90,7 @@ function getRating() {
 }
 
 function addItem() {
-  vault.push({
-    name: "MysterySong",
-    category: "Pop",
-    rarity: "Epic",
-    rating: 95,
-  });
+  vault.push({name: "MysterySong",category: "Pop",rarity: "Epic",rating: 95});
   buildList();
 }
 
@@ -120,8 +114,10 @@ function roll() {
     let randomNum = Math.round(Math.random() * 100);
 
     if (randomNum < chance && chosenSong.rarity === "Legendary") {
-      mysteryTriesText.innerHTML = currentTries;
+      vault.push(chosenSong)
+      mysteryTriesText.innerHTML = "LEGENDARY PULLED! ATTEMPTS: " + currentTries;
       currentTries = 0;
+      buildList()
       break;
     } else {
       currentTries++;
