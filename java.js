@@ -8,6 +8,10 @@ const totalItemsText = document.getElementById("totalItems");
 const avgRatingText = document.getElementById("avgRating");
 const mysteryTriesText = document.getElementById("mysteryTries");
 
+const filterBtn = document.getElementById("filterBtn");
+const showAllBtn = document.getElementById("showAllBtn");
+const inputText = document.getElementById("inputText");
+
 // the vault pool
 let vault = [
   { name: "Song1", category: "Pop", rarity: "Common", rating: 48 },
@@ -40,6 +44,8 @@ addButton.addEventListener("click", addItem);
 removeButton.addEventListener("click", removeItem);
 mergeButton.addEventListener("click", merge);
 mysteryBtn.addEventListener("click", roll);
+filterBtn.addEventListener("click", filterSongs);
+showAllBtn.addEventListener("click", buildList);
 
 // STEP 1: building the list and displaying it on the page
 function refresh() {
@@ -90,7 +96,12 @@ function getRating() {
 }
 
 function addItem() {
-  vault.push({name: "MysterySong",category: "Pop",rarity: "Epic",rating: 95});
+  vault.push({
+    name: "MysterySong",
+    category: "Pop",
+    rarity: "Epic",
+    rating: 95,
+  });
   buildList();
 }
 
@@ -114,15 +125,36 @@ function roll() {
     let randomNum = Math.round(Math.random() * 100);
 
     if (randomNum < chance && chosenSong.rarity === "Legendary") {
-      vault.push(chosenSong)
-      mysteryTriesText.innerHTML = "LEGENDARY PULLED! ATTEMPTS: " + currentTries;
+      vault.push(chosenSong);
+      mysteryTriesText.innerHTML =
+        "LEGENDARY PULLED! ATTEMPTS: " + currentTries;
       currentTries = 0;
-      buildList()
+      buildList();
       break;
     } else {
       currentTries++;
     }
   }
+}
+
+function filterSongs() {
+  let items = document.getElementsByTagName("li");
+
+  let filteredList = [];
+  let hiddenList = [];
+
+  for (let i = 0; i < vault.length; i++) {
+    if (vault[i].rarity.toLowerCase() === inputText.value.toLowerCase()) {
+      filteredList.push(vault[i]);
+    } else {
+      hiddenList.push(vault[i]);
+    }
+  }
+
+  vault = filteredList;
+  buildList();
+
+  vault = [...filteredList, ...hiddenList];
 }
 
 function buildList() {
@@ -132,3 +164,122 @@ function buildList() {
 }
 
 buildList();
+
+// // Original burger menu
+// let burgers = [
+//   { name: "Chicken", category: "Meat", popularity: 8, rating: 3.75, price: 5 },
+//   { name: "Beef", category: "Meat", popularity: 10, rating: 4, price: 4 },
+//   {
+//     name: "Veggie",
+//     category: "Vegetarian",
+//     popularity: 4,
+//     rating: 3.92,
+//     price: 6,
+//   },
+//   { name: "Heavy", category: "Other", popularity: 6, rating: 2, price: 4 },
+//   {
+//     name: "Lettuce",
+//     category: "Vegetarian",
+//     popularity: 3,
+//     rating: 1.25,
+//     price: 5,
+//   },
+//   { name: "Smash", category: "Other", popularity: 10, rating: 4.93, price: 7 },
+//   { name: "Fish", category: "Meat", popularity: 7, rating: 2.5, price: 3 },
+//   {
+//     name: "Cheese",
+//     category: "Vegetarian",
+//     popularity: 6.3,
+//     rating: 4.1,
+//     price: 2,
+//   },
+// ];
+
+// // Additional burgers for the merge vault
+// let bonusBurgers = [
+//   {
+//     name: "Taco",
+//     category: "Vegetarian",
+//     popularity: 7.1,
+//     rating: 4.75,
+//     price: 1,
+//   },
+//   { name: "Shrimp", category: "Meat", popularity: 5, rating: 3, price: 1 },
+//   { name: "Plastic", category: "Other", popularity: 1, rating: 1, price: 1 },
+// ];
+
+// // make an empty string to gather our HTML
+
+// function burgerList() {
+//   let ulHTML = "<ul>";
+
+//   for (let i = 0; i < burgers.length; i++) {
+//     ulHTML += `<li>${burgers[i].name} |  ${burgers[i].category} | ${burgers[i].popularity} | ${burgers[i].rating}</li>`;
+//   }
+
+//   ulHTML += "</ul>";
+//   document.getElementById("burgers-container").innerHTML = ulHTML;
+// }
+
+// // STEP 2: grab every li on the page and color it by rarity
+
+// function colorItems() {
+//   let items = document
+//     .getElementById("burgers-container")
+//     .getElementsByTagName("li");
+
+//   for (let i = 0; i < items.length; i++) {
+//     let rating = burgers[i].rating;
+
+//     if (rating >= 4.5) {
+//       items[i].style.backgroundColor = "#FFD700";
+//     } else if (rating >= 3.5) {
+//       items[i].style.backgroundColor = "#C0C0C0";
+//     } else {
+//       items[i].style.backgroundColor = "#CD7F32";
+//     }
+//   }
+
+//   document.getElementById("total-items").innerHTML =
+//     "Total items: " + items.length;
+// }
+
+// function showTotal() {
+//   let totalValue = 0;
+
+//   for (let i = 0; i < burgers.length; i++) {
+//     totalValue += burgers[i].price;
+//   }
+
+//   document.getElementById("total-value").innerHTML =
+//     "Total value: $" + totalValue.toFixed(2);
+// }
+
+// document.getElementById("add-btn").addEventListener("click", function () {
+//   burgers.push({
+//     name: "Mystery",
+//     category: "Other",
+//     popularity: 10,
+//     rating: 5,
+//     price: 3,
+//   });
+//   buildBurgers();
+// });
+
+// document.getElementById("remove-btn").addEventListener("click", function () {
+//   burgers.pop();
+//   buildBurgers();
+// });
+
+// document.getElementById("merge-btn").addEventListener("click", function () {
+//   burgers = [...burgers, ...bonusBurgers];
+//   buildBurgers();
+// });
+
+// function buildBurgers() {
+//   burgerList();
+//   colorItems();
+//   showTotal();
+// }
+
+// buildBurgers();
