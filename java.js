@@ -1,15 +1,20 @@
-// variables
+// vault ul element
 const ulElement = document.getElementById("vaultList");
-const addButton = document.getElementById("addBtn");
-const removeButton = document.getElementById("removeBtn");
-const mergeButton = document.getElementById("mergeBtn");
-const mysteryBtn = document.getElementById("mysteryBtn");
+
+// text labels
 const totalItemsText = document.getElementById("totalItems");
 const avgRatingText = document.getElementById("avgRating");
 const mysteryTriesText = document.getElementById("mysteryTries");
 
+// buttons
+const addButton = document.getElementById("addBtn");
+const removeButton = document.getElementById("removeBtn");
+const mergeButton = document.getElementById("mergeBtn");
+const mysteryBtn = document.getElementById("mysteryBtn");
 const filterBtn = document.getElementById("filterBtn");
 const showAllBtn = document.getElementById("showAllBtn");
+
+// filter input
 const inputText = document.getElementById("inputText");
 
 // the vault pool
@@ -117,25 +122,29 @@ function merge() {
 
 let currentTries = 0;
 function rollLegendary() { // roll a legendary
-  while (true) {
+  while (true) { // get a random song until a legendary gets pulled
     let chosenSong = Math.floor(Math.random() * vault.length);
     chosenSong = vault[chosenSong];
+
     let chance = rarities[chosenSong.rarity].rarityChance;
     let randomNum = Math.round(Math.random() * 100);
 
     // check if the legendary is pulled
     if (randomNum < chance && chosenSong.rarity === "Legendary") {
+      // update the list and text
       vault.push(chosenSong);
       mysteryTriesText.innerHTML = "LEGENDARY PULLED! ATTEMPTS: " + currentTries;
-      currentTries = 0;
-      buildList();
-      break;
+      
+      currentTries = 0; // reset the attempts
+      buildList(); // rebuild the list with the new legendary
+      break; // exit out of the loop
     } else {
       currentTries++;
     }
   }
 }
 
+// filtering system
 function filterSongs() {
   let items = document.getElementsByTagName("li");
 
@@ -144,14 +153,14 @@ function filterSongs() {
 
   for (let i = 0; i < vault.length; i++) {
     if (vault[i].rarity.toLowerCase() === inputText.value.toLowerCase()) {
-      filteredList.push(vault[i]);
+      filteredList.push(vault[i]); // if the item's rarity matches what is being searched then add it to filteredList
     } else {
-      hiddenList.push(vault[i]);
+      hiddenList.push(vault[i]); // if the item's rarity is being filtered out then add it to hiddenList
     }
   }
 
-  vault = filteredList;
-  buildList();
+  vault = filteredList;  // override the list with the new filtered list
+  buildList(); // rebuild the list
 
   vault = [...filteredList, ...hiddenList];
 }
