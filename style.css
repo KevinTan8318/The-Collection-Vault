@@ -1,6 +1,6 @@
 html {
     background-color: rgb(199, 177, 177);
-  }
+}
 
 body {
     width: 800px;
@@ -20,7 +20,7 @@ li {
     margin-right: 35;
 }
 
-button {
+button, input {
     font-size: 20;
     font-weight: bold;
     padding: 8px;
