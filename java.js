@@ -3,13 +3,14 @@ const ulElement = document.getElementById("vaultList");
 const addButton = document.getElementById("addBtn");
 const removeButton = document.getElementById("removeBtn");
 const mergeButton = document.getElementById("mergeBtn");
+const mysteryBtn = document.getElementById("mysteryBtn");
 const totalItemsText = document.getElementById("totalItems");
 const avgRatingText = document.getElementById("avgRating");
 
 // the vault pool
 let vault = [
   {name: "Song1", category: "Pop", rarity: "Common", rating: 48},
-  {name: "Song2", category: "Pop", rarity: "Tung", rating: 31},
+  {name: "Song2", category: "Pop", rarity: "Common", rating: 31},
   {name: "Song3", category: "Pop", rarity: "Uncommon", rating: 35},
   {name: "Song4", category: "Pop", rarity: "Mythic", rating: 99},
   {name: "Song5", category: "Pop", rarity: "Legendary", rating: 85},
@@ -32,13 +33,13 @@ const rarities = {
   Epic: {rarityColor: "rgb(129, 57, 196)", rarityChance: 25},
   Legendary: {rarityColor: "rgb(238, 172, 29)", rarityChance: 5},
   Mythic: {rarityColor: "rgb(255, 33, 26)", rarityChance: 1},
-  Tung: {rarityColor: "rgb(170, 112, 55)", rarityChance: .1},
 };
 
 // event listeners
 addButton.addEventListener("click", addItem);
 removeButton.addEventListener("click", removeItem);
 mergeButton.addEventListener("click", merge);
+mysteryBtn.addEventListener("click", roll);
 
 // in class example
 // STEP 1: building the list and displaying it on the page
@@ -75,7 +76,11 @@ function getRating() {
   };
   const avgRating = (totalRating / vault.length).toFixed(2);
 
-  document.getElementById("avgRating").innerHTML = avgRating + "/100";
+  if (totalRating === 0) {
+    document.getElementById("avgRating").innerHTML = "0/100";
+  } else {
+    document.getElementById("avgRating").innerHTML = avgRating + "/100";
+  };
 };
 
 function addItem() {
@@ -92,6 +97,25 @@ function merge() {
   vault = [...vault, ...bonusVault];
   buildList()
 };
+
+var legendary 
+function roll() {
+  do {
+    let chosenSong = Math.floor(Math.random() * vault.length);
+    chosenSong = vault[chosenSong];
+
+    let chance = rarities[chosenSong.rarity].rarityChance;
+    let randomNum = Math.round(Math.random() * 100);
+    console.log(chance, randomNum)
+
+    if (randomNum > chance) { // if the random num generated is lower than the song's rarity chance then add the song
+      legendary = chosenSong
+    } else {
+      roll(); // otherwise reroll for a new song
+    }
+  } while (legendary = null)
+  console.log("win")
+}
 
 function buildList() {
   refresh();
