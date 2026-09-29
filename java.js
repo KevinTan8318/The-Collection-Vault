@@ -6,9 +6,6 @@ const mergeButton = document.getElementById("mergeBtn");
 const totalItemsText = document.getElementById("totalItems");
 const avgRatingText = document.getElementById("avgRating");
 
-// array of chosen items
-const chosenItems = [];
-
 // the vault pool
 let vault = [
   {name: "Song1", category: "Pop", rarity: "Common", rating: 48},
@@ -44,6 +41,7 @@ removeButton.addEventListener("click", removeItem);
 mergeButton.addEventListener("click", merge);
 
 // in class example
+// STEP 1: building the list and displaying it on the page
 function refresh() {
   let ulHTML = "<ul>";
   for (let i = 0; i < vault.length; i++) {
@@ -53,23 +51,55 @@ function refresh() {
   ulHTML += "</ul>";
   document.getElementById("musicContainer").innerHTML = ulHTML;
 };
-refresh();
 
-function addItem() {;
+// STEP 2: grab every li element on the page and color it according to its rarity
+function colorItems() {
+  let items = document.getElementsByTagName("li");
+
+  // a for loop that defines a start, end, and an incremental value
+  for (let i = 0; i < items.length; i++) {
+    // items[i] on the page matches vault[i] in the array, because we built them in the same order
+    let rarity = vault[i]['rarity'];
+    items[i].style.backgroundColor = rarities[rarity].rarityColor;
+  };
+
+  document.getElementById("totalItems").innerHTML = items.length
+};
+
+// STEP 3: loop over the array to add up every rating and get the average by dividing it by vault.length
+function getRating() {
+  let totalRating = 0;
+
+  for (let i = 0; i < vault.length; i++) {
+    totalRating += vault[i]["rating"];
+  };
+  const avgRating = (totalRating / vault.length).toFixed(2);
+
+  document.getElementById("avgRating").innerHTML = avgRating + "/100";
+};
+
+function addItem() {
   vault.push({name: "MysterySong", category: "Pop", rarity: "Epic", rating: 95});
-  refresh();
+  buildList();
 };
 
 function removeItem() {
   vault.pop();
-  refresh();
+  buildList()
 };
 
 function merge() {
   vault = [...vault, ...bonusVault];
-  refresh();
+  buildList()
 };
 
+function buildList() {
+  refresh();
+  colorItems();
+  getRating();
+};
+
+buildList();
 
 
 
