@@ -6,33 +6,33 @@ const mergeButton = document.getElementById("mergeBtn");
 const mysteryBtn = document.getElementById("mysteryBtn");
 const totalItemsText = document.getElementById("totalItems");
 const avgRatingText = document.getElementById("avgRating");
+const mysteryTriesText = document.getElementById("mysteryTries");
 
 // the vault pool
 let vault = [
-  {name: "Song1", category: "Pop", rarity: "Common", rating: 48},
-  {name: "Song2", category: "Pop", rarity: "Common", rating: 31},
-  {name: "Song3", category: "Pop", rarity: "Uncommon", rating: 35},
-  {name: "Song4", category: "Pop", rarity: "Mythic", rating: 99},
-  {name: "Song5", category: "Pop", rarity: "Legendary", rating: 85},
-  {name: "Song6", category: "Pop", rarity: "Uncommon", rating: 35},
-  {name: "Song7", category: "Pop", rarity: "Rare", rating: 65},
-  {name: "Song8", category: "Pop", rarity: "Epic", rating: 73}
+  { name: "Song1", category: "Pop", rarity: "Common", rating: 48 },
+  { name: "Song2", category: "Pop", rarity: "Common", rating: 31 },
+  { name: "Song3", category: "Pop", rarity: "Uncommon", rating: 35 },
+  { name: "Song4", category: "Pop", rarity: "Uncommon", rating: 99 },
+  { name: "Song5", category: "Pop", rarity: "Legendary", rating: 85 },
+  { name: "Song6", category: "Pop", rarity: "Uncommon", rating: 35 },
+  { name: "Song7", category: "Pop", rarity: "Rare", rating: 65 },
+  { name: "Song8", category: "Pop", rarity: "Epic", rating: 73 },
 ];
 
 let bonusVault = [
-  {name: "BonusSong1", category: "Pop", rarity: "Epic", rating: 85},
-  {name: "BonusSong2", category: "Pop", rarity: "Mythic", rating: 95},
-  {name: "BonusSong3", category: "Pop", rarity: "Rare", rating: 52}
+  { name: "BonusSong1", category: "Pop", rarity: "Epic", rating: 85 },
+  { name: "BonusSong2", category: "Pop", rarity: "Uncommon", rating: 95 },
+  { name: "BonusSong3", category: "Pop", rarity: "Rare", rating: 52 },
 ];
 
 // list of rarities and their respective properties
 const rarities = {
-  Common: {rarityColor: "rgb(218, 218, 218)", rarityChance: 99},
-  Uncommon: {rarityColor: "rgb(67, 172, 58)", rarityChance: 75},
-  Rare: {rarityColor: "rgb(60, 129, 185)", rarityChance: 50},
-  Epic: {rarityColor: "rgb(129, 57, 196)", rarityChance: 25},
-  Legendary: {rarityColor: "rgb(238, 172, 29)", rarityChance: 5},
-  Mythic: {rarityColor: "rgb(255, 33, 26)", rarityChance: 1},
+  Common: { rarityColor: "rgb(218, 218, 218)", rarityChance: 99 },
+  Uncommon: { rarityColor: "rgb(67, 172, 58)", rarityChance: 75 },
+  Rare: { rarityColor: "rgb(60, 129, 185)", rarityChance: 50 },
+  Epic: { rarityColor: "rgb(129, 57, 196)", rarityChance: 25 },
+  Legendary: { rarityColor: "rgb(238, 172, 29)", rarityChance: 5 },
 };
 
 // event listeners
@@ -46,12 +46,19 @@ mysteryBtn.addEventListener("click", roll);
 function refresh() {
   let ulHTML = "<ul>";
   for (let i = 0; i < vault.length; i++) {
-    ulHTML += ("<li>" + vault[i].name + " (" + vault[i].category + ") " + vault[i].rarity + "</li>");
-  };
+    ulHTML +=
+      "<li>" +
+      vault[i].name +
+      " (" +
+      vault[i].category +
+      ") " +
+      vault[i].rarity +
+      "</li>";
+  }
 
   ulHTML += "</ul>";
   document.getElementById("musicContainer").innerHTML = ulHTML;
-};
+}
 
 // STEP 2: grab every li element on the page and color it according to its rarity
 function colorItems() {
@@ -60,12 +67,12 @@ function colorItems() {
   // a for loop that defines a start, end, and an incremental value
   for (let i = 0; i < items.length; i++) {
     // items[i] on the page matches vault[i] in the array, because we built them in the same order
-    let rarity = vault[i]['rarity'];
+    let rarity = vault[i]["rarity"];
     items[i].style.backgroundColor = rarities[rarity].rarityColor;
-  };
+  }
 
-  document.getElementById("totalItems").innerHTML = items.length
-};
+  document.getElementById("totalItems").innerHTML = items.length;
+}
 
 // STEP 3: loop over the array to add up every rating and get the average by dividing it by vault.length
 function getRating() {
@@ -73,109 +80,58 @@ function getRating() {
 
   for (let i = 0; i < vault.length; i++) {
     totalRating += vault[i]["rating"];
-  };
+  }
   const avgRating = (totalRating / vault.length).toFixed(2);
 
   if (totalRating === 0) {
     document.getElementById("avgRating").innerHTML = "0/100";
   } else {
     document.getElementById("avgRating").innerHTML = avgRating + "/100";
-  };
-};
+  }
+}
 
 function addItem() {
-  vault.push({name: "MysterySong", category: "Pop", rarity: "Epic", rating: 95});
+  vault.push({
+    name: "MysterySong",
+    category: "Pop",
+    rarity: "Epic",
+    rating: 95,
+  });
   buildList();
-};
+}
 
 function removeItem() {
   vault.pop();
-  buildList()
-};
+  buildList();
+}
 
 function merge() {
   vault = [...vault, ...bonusVault];
-  buildList()
-};
+  buildList();
+}
 
-var legendary 
+let currentTries = 0;
+
 function roll() {
-  do {
-    let chosenSong = Math.floor(Math.random() * vault.length);
-    chosenSong = vault[chosenSong];
+  let chosenSong = Math.floor(Math.random() * vault.length);
+  chosenSong = vault[chosenSong];
+  let chance = rarities[chosenSong.rarity].rarityChance;
+  let randomNum = Math.round(Math.random() * 100);
 
-    let chance = rarities[chosenSong.rarity].rarityChance;
-    let randomNum = Math.round(Math.random() * 100);
-    console.log(chance, randomNum)
-
-    if (randomNum > chance) { // if the random num generated is lower than the song's rarity chance then add the song
-      legendary = chosenSong
-    } else {
-      roll(); // otherwise reroll for a new song
-    }
-  } while (legendary = null)
-  console.log("win")
+  if (randomNum < chance && chosenSong.rarity === "Legendary") {
+    mysteryTriesText.innerHTML = currentTries;
+    currentTries = 0;
+    
+  } else {
+    currentTries++;
+    roll();
+  }
 }
 
 function buildList() {
   refresh();
   colorItems();
   getRating();
-};
+}
 
 buildList();
-
-
-
-
-
-// function getRating() {
-//   let totalRating = 0;
-//   for (let i = 0; i < chosenItems.length; i++) {
-//     totalRating += chosenItems[i].rating;
-//   }
-//   const avgRating = (totalRating / chosenItems.length);
-//   return (chosenItems.length > 0 && avgRating.toFixed(2)) || 0; // return the calculated average rating (we also check if there's things inside chosenItems so it doesnt return NaN)
-// };
-
-// function updateVisuals() { // update the site's texts
-//   totalItemsText.textContent = `TOTAL ITEMS: ${chosenItems.length}`;
-//   avgRatingText.textContent = `AVERAGE RATING: ${getRating()}/100`;
-// };
-
-// function addItem(chosenSong) { // add the selected random song into the list
-//   const newItem = document.createElement("li"); // create a new li
-//   newItem.id = chosenItems.length;
-//   newItem.rating = chosenSong.rating; // set the item's rating property (for avg rating calculation)
-//   newItem.textContent = `${chosenSong.name}, ${chosenSong.category}, ${chosenSong.rarity}`;
-//   newItem.style.backgroundColor = rarities[chosenSong.rarity].rarityColor;
-
-//   ulElement.appendChild(newItem); // place it into ulElement
-//   chosenItems.push(newItem);
-//   console.log(newItem);
-
-//   updateVisuals();
-// };
-
-// function removeItem() { // remove the last item in the list
-//   if (chosenItems.length > 0) { // check if there are items in the chosenItems array
-//     chosenItems.pop(); // removes item from array
-//     let element = document.getElementById(chosenItems.length);
-//     element.remove(); // removes li element
-//   }
-//   updateVisuals();
-// };
-
-// function getSong() { // get a random song from the vault
-//   let chosenSong = Math.floor(Math.random() * vault.length);
-//   chosenSong = vault[chosenSong];
-
-//   let chance = rarities[chosenSong.rarity].rarityChance;
-//   let randomNum = Math.round(Math.random() * 100);
-
-//   if (randomNum < chance) { // if the random num generated is lower than the song's rarity chance then add the song
-//     addItem(chosenSong);
-//   } else {
-//     getSong(); // otherwise reroll for a new song
-//   }
-// };
