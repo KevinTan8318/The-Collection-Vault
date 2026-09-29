@@ -14,28 +14,29 @@ const inputText = document.getElementById("inputText");
 
 // the vault pool
 let vault = [
-  { name: "Song1", category: "Pop", rarity: "Common", rating: 48 },
-  { name: "Song2", category: "Pop", rarity: "Common", rating: 31 },
-  { name: "Song3", category: "Pop", rarity: "Uncommon", rating: 35 },
-  { name: "Song6", category: "Pop", rarity: "Uncommon", rating: 35 },
-  { name: "Song7", category: "Pop", rarity: "Rare", rating: 65 },
-  { name: "Song8", category: "Pop", rarity: "Epic", rating: 73 },
-  { name: "Song4", category: "Pop", rarity: "Legendary", rating: 99 },
-  { name: "Song5", category: "Pop", rarity: "Legendary", rating: 85 },
+  { name: "Sunflower", artist: "Post Malone and Swae Lee", rarity: "Common", rating: 48 },
+  { name: "Shape Of You", artist: "Ed Sheeran", rarity: "Common", rating: 31 },
+  { name: "Lose Yourself", artist: "Eminem", rarity: "Uncommon", rating: 35 },
+  { name: "Lover Girl", artist: "Laufey", rarity: "Uncommon", rating: 35 },
+  { name: "The Monster", artist: "Eminem ft. Rihanna", rarity: "Rare", rating: 65 },
+  { name: "PUNK TACTICS", artist: "Joey Valence and Brae", rarity: "Epic", rating: 73 },
+  { name: "running on a rope", artist: "Tanger ft. Treb & Ofir Tabakov", rarity: "Legendary", rating: 99 },
+  { name: "tiny windows", artist: "Tanger ft. Frizk", rarity: "Legendary", rating: 85 },
 ];
 
+// bonus vault pool
 let bonusVault = [
-  { name: "BonusSong1", category: "Pop", rarity: "Epic", rating: 85 },
-  { name: "BonusSong2", category: "Pop", rarity: "Uncommon", rating: 95 },
-  { name: "BonusSong3", category: "Pop", rarity: "Rare", rating: 52 },
+  { name: "Never Gonna Give You Up", artist: "Rick Astley", rarity: "Legendary", rating: 85 },
+  { name: "Lucid Dreams", artist: "JUICE WRLD", rarity: "Uncommon", rating: 52 },
+  { name: "RN", artist: "Joey Valence and Brae", rarity: "Rare", rating: 89 },
 ];
 
 // list of rarities and their respective properties
 const rarities = {
   Common: { rarityColor: "rgb(218, 218, 218)", rarityChance: 99 },
   Uncommon: { rarityColor: "rgb(67, 172, 58)", rarityChance: 75 },
-  Rare: { rarityColor: "rgb(60, 129, 185)", rarityChance: 50 },
-  Epic: { rarityColor: "rgb(129, 57, 196)", rarityChance: 25 },
+  Rare: { rarityColor: "rgb(71, 146, 207)", rarityChance: 50 },
+  Epic: { rarityColor: "rgb(160, 101, 216)", rarityChance: 25 },
   Legendary: { rarityColor: "rgb(238, 172, 29)", rarityChance: 5 },
 };
 
@@ -43,7 +44,7 @@ const rarities = {
 addButton.addEventListener("click", addItem);
 removeButton.addEventListener("click", removeItem);
 mergeButton.addEventListener("click", merge);
-mysteryBtn.addEventListener("click", roll);
+mysteryBtn.addEventListener("click", rollLegendary);
 filterBtn.addEventListener("click", filterSongs);
 showAllBtn.addEventListener("click", buildList);
 
@@ -52,17 +53,17 @@ function refresh() {
   let ulHTML = "<ul>";
   for (let i = 0; i < vault.length; i++) {
     ulHTML +=
-      "<li>" +
+      "<li>'" +
       vault[i].name +
-      " (" +
-      vault[i].category +
-      ") " +
+      "' - " +
+      vault[i].artist +
+      " [" +
       vault[i].rarity +
-      "</li>";
+      "]</li>";
   }
 
   ulHTML += "</ul>";
-  document.getElementById("musicContainer").innerHTML = ulHTML;
+  document.getElementById("musicContainer").innerHTML = ulHTML; // set the music container's innerhtml as the final ul string
 }
 
 // STEP 2: grab every li element on the page and color it according to its rarity
@@ -76,7 +77,7 @@ function colorItems() {
     items[i].style.backgroundColor = rarities[rarity].rarityColor;
   }
 
-  document.getElementById("totalItems").innerHTML = items.length;
+  document.getElementById("totalItems").innerHTML = items.length; // display the total items
 }
 
 // STEP 3: loop over the array to add up every rating and get the average by dividing it by vault.length
@@ -86,48 +87,46 @@ function getRating() {
   for (let i = 0; i < vault.length; i++) {
     totalRating += vault[i]["rating"];
   }
-  const avgRating = (totalRating / vault.length).toFixed(2);
+  const avgRating = (totalRating / vault.length).toFixed(2); // calculate average rating
 
+  // display the average rating
   if (totalRating === 0) {
-    document.getElementById("avgRating").innerHTML = "0/100";
+    document.getElementById("avgRating").innerHTML = "0/100"; // ensures it doesn't display NaN
   } else {
     document.getElementById("avgRating").innerHTML = avgRating + "/100";
   }
 }
 
+// add item to vault
 function addItem() {
-  vault.push({
-    name: "MysterySong",
-    category: "Pop",
-    rarity: "Epic",
-    rating: 95,
-  });
+  vault.push({name: "i like this", artist: "Joey Valence and Brae", rarity: "Epic", rating: 95});
   buildList();
 }
 
+// remove item from vault
 function removeItem() {
   vault.pop();
   buildList();
 }
 
+// merge bonus vault with main vault
 function merge() {
   vault = [...vault, ...bonusVault];
   buildList();
 }
 
 let currentTries = 0;
-
-function roll() {
+function rollLegendary() { // roll a legendary
   while (true) {
     let chosenSong = Math.floor(Math.random() * vault.length);
     chosenSong = vault[chosenSong];
     let chance = rarities[chosenSong.rarity].rarityChance;
     let randomNum = Math.round(Math.random() * 100);
 
+    // check if the legendary is pulled
     if (randomNum < chance && chosenSong.rarity === "Legendary") {
       vault.push(chosenSong);
-      mysteryTriesText.innerHTML =
-        "LEGENDARY PULLED! ATTEMPTS: " + currentTries;
+      mysteryTriesText.innerHTML = "LEGENDARY PULLED! ATTEMPTS: " + currentTries;
       currentTries = 0;
       buildList();
       break;
@@ -157,129 +156,12 @@ function filterSongs() {
   vault = [...filteredList, ...hiddenList];
 }
 
+// build the list, color the items, and get the average rating of songs
 function buildList() {
   refresh();
   colorItems();
   getRating();
 }
 
+// initialize
 buildList();
-
-// // Original burger menu
-// let burgers = [
-//   { name: "Chicken", category: "Meat", popularity: 8, rating: 3.75, price: 5 },
-//   { name: "Beef", category: "Meat", popularity: 10, rating: 4, price: 4 },
-//   {
-//     name: "Veggie",
-//     category: "Vegetarian",
-//     popularity: 4,
-//     rating: 3.92,
-//     price: 6,
-//   },
-//   { name: "Heavy", category: "Other", popularity: 6, rating: 2, price: 4 },
-//   {
-//     name: "Lettuce",
-//     category: "Vegetarian",
-//     popularity: 3,
-//     rating: 1.25,
-//     price: 5,
-//   },
-//   { name: "Smash", category: "Other", popularity: 10, rating: 4.93, price: 7 },
-//   { name: "Fish", category: "Meat", popularity: 7, rating: 2.5, price: 3 },
-//   {
-//     name: "Cheese",
-//     category: "Vegetarian",
-//     popularity: 6.3,
-//     rating: 4.1,
-//     price: 2,
-//   },
-// ];
-
-// // Additional burgers for the merge vault
-// let bonusBurgers = [
-//   {
-//     name: "Taco",
-//     category: "Vegetarian",
-//     popularity: 7.1,
-//     rating: 4.75,
-//     price: 1,
-//   },
-//   { name: "Shrimp", category: "Meat", popularity: 5, rating: 3, price: 1 },
-//   { name: "Plastic", category: "Other", popularity: 1, rating: 1, price: 1 },
-// ];
-
-// // make an empty string to gather our HTML
-
-// function burgerList() {
-//   let ulHTML = "<ul>";
-
-//   for (let i = 0; i < burgers.length; i++) {
-//     ulHTML += `<li>${burgers[i].name} |  ${burgers[i].category} | ${burgers[i].popularity} | ${burgers[i].rating}</li>`;
-//   }
-
-//   ulHTML += "</ul>";
-//   document.getElementById("burgers-container").innerHTML = ulHTML;
-// }
-
-// // STEP 2: grab every li on the page and color it by rarity
-
-// function colorItems() {
-//   let items = document
-//     .getElementById("burgers-container")
-//     .getElementsByTagName("li");
-
-//   for (let i = 0; i < items.length; i++) {
-//     let rating = burgers[i].rating;
-
-//     if (rating >= 4.5) {
-//       items[i].style.backgroundColor = "#FFD700";
-//     } else if (rating >= 3.5) {
-//       items[i].style.backgroundColor = "#C0C0C0";
-//     } else {
-//       items[i].style.backgroundColor = "#CD7F32";
-//     }
-//   }
-
-//   document.getElementById("total-items").innerHTML =
-//     "Total items: " + items.length;
-// }
-
-// function showTotal() {
-//   let totalValue = 0;
-
-//   for (let i = 0; i < burgers.length; i++) {
-//     totalValue += burgers[i].price;
-//   }
-
-//   document.getElementById("total-value").innerHTML =
-//     "Total value: $" + totalValue.toFixed(2);
-// }
-
-// document.getElementById("add-btn").addEventListener("click", function () {
-//   burgers.push({
-//     name: "Mystery",
-//     category: "Other",
-//     popularity: 10,
-//     rating: 5,
-//     price: 3,
-//   });
-//   buildBurgers();
-// });
-
-// document.getElementById("remove-btn").addEventListener("click", function () {
-//   burgers.pop();
-//   buildBurgers();
-// });
-
-// document.getElementById("merge-btn").addEventListener("click", function () {
-//   burgers = [...burgers, ...bonusBurgers];
-//   buildBurgers();
-// });
-
-// function buildBurgers() {
-//   burgerList();
-//   colorItems();
-//   showTotal();
-// }
-
-// buildBurgers();
