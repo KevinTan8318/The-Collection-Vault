@@ -1,5 +1,17 @@
+html {
+  background-color: rgb(199, 177, 177);
+}
+body {
+  width: 500px;
+  margin: auto;
+  text-align: center;
+  font-family: sans-serif;
+  font-weight: bold;
+}
+
 li {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
+  list-style-type: none;
+  padding: 8px;
+  border-radius: 5px;
+  margin: auto;
 }
