@@ -113,18 +113,19 @@ function merge() {
 let currentTries = 0;
 
 function roll() {
-  let chosenSong = Math.floor(Math.random() * vault.length);
-  chosenSong = vault[chosenSong];
-  let chance = rarities[chosenSong.rarity].rarityChance;
-  let randomNum = Math.round(Math.random() * 100);
+  while (true) {
+    let chosenSong = Math.floor(Math.random() * vault.length);
+    chosenSong = vault[chosenSong];
+    let chance = rarities[chosenSong.rarity].rarityChance;
+    let randomNum = Math.round(Math.random() * 100);
 
-  if (randomNum < chance && chosenSong.rarity === "Legendary") {
-    mysteryTriesText.innerHTML = currentTries;
-    currentTries = 0;
-    
-  } else {
-    currentTries++;
-    roll();
+    if (randomNum < chance && chosenSong.rarity === "Legendary") {
+      mysteryTriesText.innerHTML = currentTries;
+      currentTries = 0;
+      break;
+    } else {
+      currentTries++;
+    }
   }
 }
 
